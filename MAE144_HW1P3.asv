@@ -1,7 +1,5 @@
 clear; close all; clc;
 
-ys=[20 20]; xs=[1 10]; h=0.01; Ds=RR_tf(ys,xs); omegac=sqrt(10); [Dz]=DL_C2D_matched(Ds,h,omegac)
-
 %% MAE144 HW1 Problem3
 function [dz] = DL_C2D_matched(ds,h, omgBar) 
 % Matched pole-zero method that transform continuous time transfer
@@ -10,10 +8,8 @@ function [dz] = DL_C2D_matched(ds,h, omgBar)
 % omgBar - frequency of interest
 
 
-    % if ~isa(h,'RR_poly'), h = 0.001; end % estimate a small value time step
-    % if ~isa(omgBar,'RR_poly'), omgBar = 0; end % check if omega bar input exists
-    h = 0.001;
-    omgBar = 0;
+    if ~isa(h,'RR_poly'), h = 0.001; end % estimate a small value time step
+    if ~isa(omgBar,'RR_poly'), omgBar = 0; end % check if omega bar input exists
     
     zeros = RR_roots(ds.num); % finding the zeros and poles of continuous tf
     poles = RR_roots(ds.den);
@@ -27,17 +23,18 @@ function [dz] = DL_C2D_matched(ds,h, omgBar)
         for j = 1:(infz-1), z_zeros = [z_zeros -1]; end
     end
 
-    prodnum = 1; % product of numerator
-    for j = 1:numel(z_zeros) prodnum = prodnum * (h * omgBar + z_zeros(j)); end
-    prodden = 1; % product of denominator
-    for j = 1:numel(z_poles) prodden = prodden * (h * omgBar + z_poles(j)); end
-    kfac = prodnum/prodden; % finding the correct gain
+    prodnum = ones(numel(z_zeros));
+    for j = 1:numel(z_zeros)
+    
+    end
+    prodden = ones(numel(z_poles));
+    for j = 1:numel(z_poles) end
+    kfac = prod(z_zeros) / prod(z_poles); % finding the correct gain
 
     dz = kfac * RR_tf(z_zeros,z_poles); % return the fully transformed descrete transfer function
     dz.h = h;
 
 end
-
 
 % function [Dz]=RR_C2D_tustin(Ds,h,omegac)
 % % function [Dz]=RR_C2D_tustin(Ds,h,omegac)
