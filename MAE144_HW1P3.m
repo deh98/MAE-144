@@ -10,10 +10,10 @@ function [dz] = DL_C2D_matched(ds,h, omgBar)
 % omgBar - frequency of interest
 
 
-    % if ~isa(h,'RR_poly'), h = 0.001; end % estimate a small value time step
-    % if ~isa(omgBar,'RR_poly'), omgBar = 0; end % check if omega bar input exists
-    h = 0.001;
-    omgBar = 0;
+    if ~isa(h,'RR_poly'), h = 0.001; end % estimate a small value time step
+    if ~isa(omgBar,'RR_poly'), omgBar = 0; end % check if omega bar input exists
+    % h = 0.001;
+    % omgBar = 0;
     
     zeros = RR_roots(ds.num); % finding the zeros and poles of continuous tf
     poles = RR_roots(ds.den);
